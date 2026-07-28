@@ -4,7 +4,8 @@
 	   :make-cd
 	   :dump-db
 	   :prompt-read
-	   :prompt-for-cd))
+	   :prompt-for-cd
+	   :save-db))
 
 (in-package :pcl)
 
@@ -35,3 +36,24 @@
      :junk-allowed t)
     0)
    (y-or-n-p "Ripped? ")))
+
+(defun add-cds ()
+  (loop
+   (add-record (prompt-for-cd))
+   (if (not (y-or-n-p "Another?")) (return))))
+
+(defun save-db (filename)
+  (with-open-file
+      (out filename
+	   :direction :output
+	   :if-exists :supersede)
+    (with-standard-io-syntax
+      (print *db* out))))
+
+(defun load-db (filename)
+  (with-open-file
+      (in filename)
+    (with-standard-io-syntax
+      (let ((*read-eval* nill))
+	(setf *db* (read in))))))
+
