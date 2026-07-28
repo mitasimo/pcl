@@ -5,7 +5,8 @@
 	   :dump-db
 	   :prompt-read
 	   :prompt-for-cd
-	   :save-db))
+	   :save-db
+	   :load-db))
 
 (in-package :pcl)
 
@@ -54,6 +55,6 @@
   (with-open-file
       (in filename)
     (with-standard-io-syntax
-      (let ((*read-eval* nill))
+      (let ((*read-eval* nil))
 	(setf *db* (read in))))))
 
