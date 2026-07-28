@@ -1,3 +1,12 @@
+(defpackage :pcl
+  (:use :cl)
+  (:export :add-record
+	   :make-cd
+	   :dump-db
+	   :prompt-read
+	   :prompt-for-cd))
+
+(in-package :pcl)
 
 (defvar *db* nil)
 
@@ -9,4 +18,20 @@
 
 (defun dump-db ()
   (dolist (cd *db*)
-    (format t "~{~a:~10t~a~%~}~%" cdf)))
+    (format t "~{~a:~10t~a~%~}~%" cd)))
+
+(defun prompt-read (prompt)
+  (format *query-io* "~a: " prompt)
+  (force-output *query-io*)
+  (read-line *query-io*))
+
+(defun prompt-for-cd ()
+  (make-cd
+   (prompt-read "Title")
+   (prompt-read "Artist")
+   (or
+    (parse-integer
+     (prompt-read "Rating")
+     :junk-allowed t)
+    0)
+   (y-or-n-p "Ripped? ")))
